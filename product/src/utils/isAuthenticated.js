@@ -1,3 +1,4 @@
+// product/src/utils/isAuthenticated.js
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 

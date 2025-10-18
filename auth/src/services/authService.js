@@ -1,3 +1,4 @@
+// auth/services/authService.js
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const UserRepository = require("../repositories/userRepository");

@@ -1,3 +1,4 @@
+// product/src/routes/productRoutes.js
 const express = require("express");
 const ProductController = require("../controllers/productController");
 const isAuthenticated = require("../utils/isAuthenticated");

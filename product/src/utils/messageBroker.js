@@ -1,3 +1,4 @@
+// product/src/utils/messageBroker.js
 const amqp = require("amqplib");
 
 class MessageBroker {

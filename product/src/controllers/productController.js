@@ -1,3 +1,4 @@
+// product/src/controllers/productController.js
 const Product = require("../models/product");
 const messageBroker = require("../utils/messageBroker");
 const uuid = require('uuid');
