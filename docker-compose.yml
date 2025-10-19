@@ -1,85 +1,91 @@
-version: "3.8"
+# EProject-Phase-1/docker-compose.yml
+version: "3.9"
+
 services:
-  mongo-auth:
-    image: mongo
-    container_name: mongo-auth
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-auth-data:/data/db
-
-  mongo-product:
-    image: mongo
-    container_name: mongo-product
-    ports:
-      - "27018:27017"
-    volumes:
-      - mongo-product-data:/data/db
-
-  mongo-order:
-    image: mongo
-    container_name: mongo-order
-    ports:
-      - "27019:27017"
-    volumes:
-      - mongo-order-data:/data/db
-
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:4-management
     container_name: rabbitmq
     ports:
-      - "5672:5672"
-      - "15672:15672"  # giao diện web quản lý RabbitMQ
-
-  auth:
-    build: ./auth
-    container_name: auth
-    restart: always
-    ports:
-      - "3000:3000"
+      - "5672:5672"      # port cho ứng dụng backend (NodeJS, NestJS, v.v.)
+      - "15672:15672"    # port cho web UI quản lý RabbitMQ
     environment:
-      - MONGODB_AUTH_URI=mongodb://mongo-auth:27017/auth
-      - JWT_SECRET=secret
-    depends_on:
-      - mongo-auth
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
 
-  product:
-    build: ./product
-    container_name: product
-    restart: always
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
     ports:
-      - "3001:3001"
-    environment:
-      - MONGODB_PRODUCT_URI=mongodb://mongo-product:27017/products
-      - JWT_SECRET=secret
-    depends_on:
-      - mongo-product
-      - rabbitmq
+      - "27017:27017"    # Port mặc định cho MongoDB
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: admin
+    #   MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
 
-  order:
-    build: ./order
-    container_name: order
-    restart: always
-    ports:
-      - "3002:3002"
-    environment:
-      - MONGODB_ORDER_URI=mongodb://mongo-order:27017/orders
-      - JWT_SECRET=secret
-    depends_on:
-      - mongo-order
-      - rabbitmq
-
-  api-gateway:
-    build: ./api-gateway
-    container_name: api-gateway
+  api_gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api_gateway
     ports:
       - "3003:3003"
+    volumes:
+      - ./api-gateway:/usr/src/app
+      - /usr/src/app/node_modules
     depends_on:
-      - auth
-      - product
-      - order
+      - rabbitmq
+    restart: unless-stopped
+
+  auth_service:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    container_name: auth_service
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./auth:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - rabbitmq
+      - mongodb
+    restart: unless-stopped
+
+  order_service:
+    build:
+      context: ./order
+      dockerfile: Dockerfile
+    container_name: order_service
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./order:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - rabbitmq
+      - mongodb
+    restart: unless-stopped
+
+  product_service:
+    build:
+      context: ./product
+      dockerfile: Dockerfile
+    container_name: product_service
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./product:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - rabbitmq
+      - mongodb
+    restart: unless-stopped
 
 volumes:
-  mongo-auth-data:
-  mongo-product-data:
-  mongo-order-data:
+  rabbitmq_data:
+  mongodb_data:
