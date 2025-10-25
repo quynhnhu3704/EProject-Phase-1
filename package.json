@@ -1,5 +1,5 @@
 {
-  "name": "eproject",
+  "name": "EProject",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,26 +11,15 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.10.3",
-    "bcryptjs": "^3.0.2",
     "chai": "^4.3.7",
     "chai-http": "^4.3.0",
-    "connect-mongo": "^5.1.0",
-    "express": "^4.21.2",
-    "express-session": "^1.18.2",
+    "express": "^4.18.2",
     "mocha": "^10.2.0",
-    "mongoose": "^7.8.7"
+    "mongoose": "^7.0.0"
   },
   "devDependencies": {
-    "dotenv": "^16.6.1",
+    "dotenv": "^16.0.3",
     "jsonwebtoken": "^9.0.0",
     "wait-on": "^7.0.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/quynhnhu3704/EProject-Phase-1.git"
-  },
-  "bugs": {
-    "url": "https://github.com/quynhnhu3704/EProject-Phase-1/issues"
-  },
-  "homepage": "https://github.com/quynhnhu3704/EProject-Phase-1#readme"
+  }
 }

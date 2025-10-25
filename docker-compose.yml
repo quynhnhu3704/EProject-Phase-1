@@ -1,91 +1,77 @@
-# EProject-Phase-1/docker-compose.yml
-version: "3.9"
-
+version: "3.8"
 services:
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - backend
+
   rabbitmq:
-    image: rabbitmq:4-management
+    image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
-      - "5672:5672"      # port cho ứng dụng backend (NodeJS, NestJS, v.v.)
-      - "15672:15672"    # port cho web UI quản lý RabbitMQ
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    restart: unless-stopped
+    networks:
+      - backend
 
-  mongodb:
-    image: mongo:7.0
-    container_name: mongodb
-    ports:
-      - "27017:27017"    # Port mặc định cho MongoDB
-    # environment:
-    #   MONGO_INITDB_ROOT_USERNAME: admin
-    #   MONGO_INITDB_ROOT_PASSWORD: password
-    volumes:
-      - mongodb_data:/data/db
-    restart: unless-stopped
-
-  api_gateway:
-    build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
-    container_name: api_gateway
+  api-gateway:
+    build: ./api-gateway
     ports:
       - "3003:3003"
-    volumes:
-      - ./api-gateway:/usr/src/app
-      - /usr/src/app/node_modules
     depends_on:
-      - rabbitmq
-    restart: unless-stopped
+      - auth
+      - product
+      - order
+    networks:
+      - backend
 
-  auth_service:
-    build:
-      context: ./auth
-      dockerfile: Dockerfile
-    container_name: auth_service
+  auth:
+    build: ./auth
     ports:
       - "3000:3000"
-    volumes:
-      - ./auth:/usr/src/app
-      - /usr/src/app/node_modules
+    env_file:
+      - ./auth/.env
     depends_on:
+      - mongo
       - rabbitmq
-      - mongodb
-    restart: unless-stopped
+    networks:
+      - backend
 
-  order_service:
-    build:
-      context: ./order
-      dockerfile: Dockerfile
-    container_name: order_service
-    ports:
-      - "3002:3002"
-    volumes:
-      - ./order:/usr/src/app
-      - /usr/src/app/node_modules
-    depends_on:
-      - rabbitmq
-      - mongodb
-    restart: unless-stopped
-
-  product_service:
-    build:
-      context: ./product
-      dockerfile: Dockerfile
-    container_name: product_service
+  product:
+    build: ./product
     ports:
       - "3001:3001"
-    volumes:
-      - ./product:/usr/src/app
-      - /usr/src/app/node_modules
+    env_file:
+      - ./product/.env
     depends_on:
+      - mongo
       - rabbitmq
-      - mongodb
-    restart: unless-stopped
+    networks:
+      - backend
+
+  order:
+    build: ./order
+    ports:
+      - "3002:3002"
+    env_file:
+      - ./order/.env
+    depends_on:
+      - mongo
+      - rabbitmq
+    networks:
+      - backend
 
 volumes:
-  rabbitmq_data:
-  mongodb_data:
+  mongo_data:
+
+networks:
+  backend:
+    driver: bridge

@@ -1,4 +1,3 @@
-// product/src/repositories/productsRepository.js
 const mongoose = require("mongoose");
 
 /**

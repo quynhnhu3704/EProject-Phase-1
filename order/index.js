@@ -1,4 +1,3 @@
-// order/index.js
 require("dotenv").config();
 const App = require("./src/app");
 

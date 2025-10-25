@@ -1,4 +1,3 @@
-// api-gateway/index.js
 const express = require("express");
 const httpProxy = require("http-proxy");
 
