@@ -8,6 +8,8 @@ const productController = new ProductController();
 router.post("/", isAuthenticated, productController.createProduct);
 router.post("/buy", isAuthenticated, productController.createOrder);
 router.get("/", isAuthenticated, productController.getProducts);
-router.get("/:orderId", isAuthenticated, productController.getOrderStatus); // Cau 8: GET /:orderId to get order status
+
+// Hiển thị chi tiết sản phẩm theo ID
+router.get("/:id", isAuthenticated, productController.getProductById);
 
 module.exports = router;

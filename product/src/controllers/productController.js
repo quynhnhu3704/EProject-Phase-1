@@ -11,7 +11,6 @@ class ProductController {
     this.createOrder = this.createOrder.bind(this);
     this.getOrderStatus = this.getOrderStatus.bind(this);
     this.ordersMap = new Map();
-
   }
 
   async createProduct(req, res, next) {
@@ -84,16 +83,6 @@ class ProductController {
       res.status(500).json({ message: "Server error" });
     }
   }
-  
-  // Cau 8: GET /:orderId to get order status
-  async getOrderStatus(req, res, next) {
-    const { orderId } = req.params;
-    const order = this.ordersMap.get(orderId);
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-    return res.status(200).json(order);
-  }
 
   async getProducts(req, res, next) {
     try {
@@ -108,6 +97,12 @@ class ProductController {
       console.error(error);
       res.status(500).json({ message: "Server error" });
     }
+  }
+
+  // Hiển thị chi tiết sản phẩm theo ID
+  async getProductById(req, res, next) {
+    const product = await Product.findById(req.params.id);
+    res.status(200).json(product);
   }
 }
 
