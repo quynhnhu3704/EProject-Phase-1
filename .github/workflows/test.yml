@@ -91,14 +91,15 @@ jobs:
 
     - name: Push images to Docker Hub
       run: |
-        docker tag eproject-phase-1-auth:latest ${{ secrets.DOCKER_USERNAME }}/eproject-phase-1:auth-latest
-        docker push ${{ secrets.DOCKER_USERNAME }}/eproject-phase-1:auth-latest
+        docker tag 22663381-nguyenthiquynhnhu-eproject-auth:latest quynhnhu3704/22663381-nguyenthiquynhnhu-eproject:auth-latest
+        docker push quynhnhu3704/22663381-nguyenthiquynhnhu-eproject:auth-latest
 
-        docker tag eproject-phase-1-product:latest ${{ secrets.DOCKER_USERNAME }}/eproject-phase-1:product-latest
-        docker push ${{ secrets.DOCKER_USERNAME }}/eproject-phase-1:product-latest
+        docker tag 22663381-nguyenthiquynhnhu-eproject-product:latest quynhnhu3704/22663381-nguyenthiquynhnhu-eproject:product-latest
+        docker push quynhnhu3704/22663381-nguyenthiquynhnhu-eproject:product-latest
 
-        docker tag eproject-phase-1-order:latest ${{ secrets.DOCKER_USERNAME }}/eproject-phase-1:order-latest
-        docker push ${{ secrets.DOCKER_USERNAME }}/eproject-phase-1:order-latest
+        docker tag 22663381-nguyenthiquynhnhu-eproject-order:latest quynhnhu3704/22663381-nguyenthiquynhnhu-eproject:order-latest
+        docker push quynhnhu3704/22663381-nguyenthiquynhnhu-eproject:order-latest
 
-        docker tag eproject-phase-1-api-gateway:latest ${{ secrets.DOCKER_USERNAME }}/eproject-phase-1:api-gateway-latest
-        docker push ${{ secrets.DOCKER_USERNAME }}/eproject-phase-1:api-gateway-latest
+        docker tag 22663381-nguyenthiquynhnhu-eproject-api-gateway:latest quynhnhu3704/22663381-nguyenthiquynhnhu-eproject:api-gateway-latest
+        docker push quynhnhu3704/22663381-nguyenthiquynhnhu-eproject:api-gateway-latest
+
