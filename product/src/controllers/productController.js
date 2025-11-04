@@ -99,10 +99,10 @@ class ProductController {
   }
 
   // Hiển thị chi tiết sản phẩm theo ID
-  async getid(req, res, next) {
-    const product = await Product.findById(req.params.id);
-    res.status(200).json(product);
-  }
+  // async getid(req, res, next) {
+  //   const product = await Product.findById(req.params.id);
+  //   res.status(200).json(product);
+  // }
 }
 
 module.exports = ProductController;
