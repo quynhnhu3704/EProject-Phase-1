@@ -10,6 +10,7 @@ router.post("/buy", isAuthenticated, productController.createOrder);
 router.get("/", isAuthenticated, productController.getProducts);
 
 // Hiển thị chi tiết sản phẩm theo ID
+router.get("/:id", isAuthenticated, productController.getid);
 
 
 module.exports = router;
