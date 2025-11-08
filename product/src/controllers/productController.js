@@ -103,6 +103,12 @@ class ProductController {
     const product = await Product.findById(req.params.id);
     res.status(200).json(product);
   }
+
+
+
+
+
+  
 }
 
 module.exports = ProductController;
